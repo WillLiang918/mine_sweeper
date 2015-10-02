@@ -1,19 +1,43 @@
 class Tile
+  DELTAS = [
+    [0, 1],
+    [1, 1],
+    [0, 1],
+    [-1, 1],
+    [-1, 0],
+    [-1, -1],
+    [-1, 0],
+    [1, -1]
+  ]
 
-  def initialize(board, mine = false)
+
+  def initialize(board, tile_pos, mine = false)
     @mine = mine
     @flagged = false
     @revealed = false
     @board = board
+    @tile_pos = tile_pos
   end
 
-  #new arr = bomb_count [true]
 
   def reveal
     @revealed = true
   end
 
   def neighbors
+    tile_x, tile_y = tile_pos
+    result = []
+    
+    DELTAS.map do |delta|
+      delta_x, delta_y = delta
+      x = tile_x + delta_x
+      y = tile_y + delta_y
+      pos = [x, y]
+      result << pos if pos.all? { |el| el.between?(0..board.dim) }
+    end
+
+    result
   end
+
 
 end
