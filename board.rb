@@ -45,14 +45,35 @@ class Board
     end
   end
 
-  end
-
   def die(tile)
     dead = true if tile.mine && tile.revealed
   end
+
+  def render
+    @board.each do |row|
+      line = ""
+      row.each do |tile|
+        if tile.flagged
+          line.concat(" F")
+        elsif tile.revealed
+          num = tile.neighbors_mine_count
+          str = ( num == 0 ? " _" : " #{num}" )
+          line.concat(str)
+        elsif tile.mine && tile.revealed
+          line.concat(" X")
+        else
+          line.concat(" *")
+        end
+
+      puts line
+    end
+  end
+
+
 
 end
 
 if __FILE__ == $PROGRAM_NAME
   b = Board.new
+  b.place_mines
 end
