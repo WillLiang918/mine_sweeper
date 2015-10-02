@@ -27,7 +27,7 @@ class Tile
   def neighbors
     tile_x, tile_y = tile_pos
     result = []
-    
+
     DELTAS.map do |delta|
       delta_x, delta_y = delta
       x = tile_x + delta_x
@@ -39,5 +39,12 @@ class Tile
     result
   end
 
+  def neighbors_mine_count
+    neighbors.select { |tiles| tiles.mine }.count
+  end
+
+  def inspect
+    "{tile_pos: @tile_pos, mine: @mine, flagged: @flagged, revealed: @revealed}"
+  end
 
 end
