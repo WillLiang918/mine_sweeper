@@ -45,10 +45,6 @@ class Board
     end
   end
 
-  def die(tile)
-    dead = true if tile.mine && tile.revealed
-  end
-
   def render
     @board.each do |row|
       line = ""
@@ -64,7 +60,7 @@ class Board
         else
           line.concat(" *")
         end
-
+      end
       puts line
     end
   end
