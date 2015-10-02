@@ -16,7 +16,7 @@ class Board
 
     (0...dim).each do |row|
       (0...dim).each do |col|
-        self[row, col] = Tile.new(self, mines_arr.pop)
+        self[row, col] = Tile.new(self, [row, col], mines_arr.pop)
       end
     end
   end
@@ -29,6 +29,10 @@ class Board
   def []=(pos, value)
     x,y = pos
     @grid[x][y] = value
+  end
+
+  def game_over?
+    won? || die?
   end
 
 end
