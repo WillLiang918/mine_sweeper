@@ -36,19 +36,20 @@ class Board
   end
 
   def game_over?
-    live? || dead
+    win? || dead
   end
 
-  def live?
+  def win?
     grid.flatten.all? do |tile|
+      tile.mine && tile.flagged || !title.mine && tile.revealed
     end
+  end
 
   end
 
   def die(tile)
     dead = true if tile.mine && tile.revealed
   end
-
 
 end
 
