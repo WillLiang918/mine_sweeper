@@ -2,6 +2,7 @@ require_relative "tile"
 
 class Board
   attr_reader :mines_count, :grid, :dim
+  attr_accessor :dead
 
   def initialize(dim = 10)
     @dim = dim
@@ -16,7 +17,7 @@ class Board
     remaining_tiles = dim ** 2 - mines_count
 
     mines_arr += [false] * remaining_tiles
-    mines_arr.shuffle
+    mines_arr.shuffle!
 
     (0...dim).each do |row|
       (0...dim).each do |col|
@@ -39,6 +40,10 @@ class Board
     win? || @dead
   end
 
+  def reveal_all
+    grid.flatten.each { |tile| tile.revealed = true}
+  end
+
   def win?
     grid.flatten.all? do |tile|
       tile.mine && tile.flagged || !tile.mine && tile.revealed
@@ -52,12 +57,12 @@ class Board
       row.each do |tile|
         if tile.flagged
           line.concat(" F")
+        elsif tile.mine && tile.revealed
+          line.concat(" X")
         elsif tile.revealed
           num = tile.neighbors_mine_count
           str = ( num == 0 ? " _" : " #{num}" )
           line.concat(str)
-        elsif tile.mine && tile.revealed
-          line.concat(" X")
         else
           line.concat(" *")
         end
@@ -65,9 +70,6 @@ class Board
       puts line
     end
   end
-
-
-
 end
 
 if __FILE__ == $PROGRAM_NAME

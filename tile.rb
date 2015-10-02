@@ -1,16 +1,18 @@
+require "byebug"
 class Tile
   DELTAS = [
     [0, 1],
     [1, 1],
-    [0, 1],
-    [-1, 1],
-    [-1, 0],
+    [1, 0],
+    [1, -1],
+    [0, -1],
     [-1, -1],
     [-1, 0],
-    [1, -1]
+    [-1, 1]
   ]
 
-  attr_reader :mine, :revealed, :flagged
+  attr_reader :mine, :flagged, :tile_pos
+  attr_accessor :revealed
 
   def initialize(board, tile_pos, mine = false)
     @mine = mine
@@ -21,10 +23,11 @@ class Tile
   end
 
   def reveal
+    return if @revealed
     @revealed = true
     children = neighbors
     unless neighbors_mine_count > 0
-      children.each { |child| child.reveal}
+      children.each { |child| child.reveal }
     end
   end
 
@@ -37,22 +40,21 @@ class Tile
       x = tile_x + delta_x
       y = tile_y + delta_y
       pos = [x, y]
-      result << @board[pos] if pos.all? { |el| el.between?(0, @board.dim) }
+      result << @board[pos] if pos.all? { |el| el.between?(0, @board.dim - 1) }
     end
 
     result
   end
 
   def neighbors_mine_count
-    neighbors.select { |tile| p tile; tile.mine }.count
+    neighbors.select { |tile| tile.mine }.count
   end
 
   def inspect
-    "{tile_pos: @tile_pos, mine: @mine, flagged: @flagged, revealed: @revealed}"
+   "tile_pos: #{@tile_pos}, mine: #{@mine}, flagged: #{@flagged}, revealed: #{@revealed}}"
   end
 
   def toggle_flag
     @flagged = !@flagged
   end
-
 end

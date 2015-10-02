@@ -9,9 +9,13 @@ class MineSweeper
 
   def play
     until @board.game_over?
+      system("clear")
       @board.render
       do_action(get_pos, get_action)
     end
+    system("clear")
+    @board.reveal_all
+    @board.render
     board.dead ? puts("You're dead") : puts("You're not dead")
   end
 
@@ -26,7 +30,7 @@ class MineSweeper
   def get_pos
     loop do
       puts 'Choose wisely, or die! ex: "1, 2"'
-      guess_pos = STDIN.gets.chomp.split(',').map { |el| el.to_i }
+      guess_pos = STDIN.gets.chomp.split(',').map { |el| el.to_i }.reverse
       return guess_pos if valid_pos?(guess_pos)
     end
   end
@@ -43,7 +47,6 @@ class MineSweeper
   def valid_pos?(pos)
     return false if @board[pos].nil?
     true
-    #!(@board[pos].nil? || @board[pos].revealed)
   end
 
   def valid_action?(action)
@@ -51,5 +54,7 @@ class MineSweeper
   end
 end
 
-g = MineSweeper.new
-g.play
+if __FILE__ == $PROGRAM_NAME
+  g = MineSweeper.new
+  g.play
+end
