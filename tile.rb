@@ -10,6 +10,7 @@ class Tile
     [1, -1]
   ]
 
+  attr_reader :mine, :revealed, :flagged
 
   def initialize(board, tile_pos, mine = false)
     @mine = mine
@@ -21,11 +22,14 @@ class Tile
 
   def reveal
     @revealed = true
-    
+    children = neighbors
+    unless neighbors_mine_count > 0
+      children.each { |child| child.reveal}
+    end
   end
 
   def neighbors
-    tile_x, tile_y = tile_pos
+    tile_x, tile_y = @tile_pos
     result = []
 
     DELTAS.map do |delta|
@@ -33,14 +37,14 @@ class Tile
       x = tile_x + delta_x
       y = tile_y + delta_y
       pos = [x, y]
-      result << pos if pos.all? { |el| el.between?(0..board.dim) }
+      result << @board[pos] if pos.all? { |el| el.between?(0, @board.dim) }
     end
 
     result
   end
 
   def neighbors_mine_count
-    neighbors.select { |tiles| tiles.mine }.count
+    neighbors.select { |tile| p tile; tile.mine }.count
   end
 
   def inspect

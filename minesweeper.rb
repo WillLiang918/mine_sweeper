@@ -2,6 +2,7 @@ require_relative "board"
 
 class MineSweeper
 
+  attr_reader :board
   def initialize(board = nil)
     @board = (board ||= Board.new)
   end
@@ -18,7 +19,7 @@ class MineSweeper
     loop do
       puts 'Choose: reveal (r), toggle flag (f), save (s)'
       action = STDIN.gets.chomp
-      return action if valid_action(action)
+      return action if valid_action?(action)
     end
   end
 
@@ -26,7 +27,7 @@ class MineSweeper
     loop do
       puts 'Choose wisely, or die! ex: "1, 2"'
       guess_pos = STDIN.gets.chomp.split(',').map { |el| el.to_i }
-      return guess_pos if valid_pos(guess_pos)
+      return guess_pos if valid_pos?(guess_pos)
     end
   end
 
@@ -40,10 +41,15 @@ class MineSweeper
   end
 
   def valid_pos?(pos)
-    !(@board[pos].nil? || @board[pos].revealed)
+    return false if @board[pos].nil?
+    true
+    #!(@board[pos].nil? || @board[pos].revealed)
   end
 
   def valid_action?(action)
     action == "r" || action == "f"
   end
 end
+
+g = MineSweeper.new
+g.play

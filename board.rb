@@ -1,6 +1,5 @@
 require_relative "tile"
 
-
 class Board
   attr_reader :mines_count, :grid, :dim
 
@@ -9,6 +8,7 @@ class Board
     @mines_count = dim
     @grid = Array.new(dim) {Array.new(dim)}
     @dead = false
+    place_mines
   end
 
   def place_mines
@@ -41,13 +41,14 @@ class Board
 
   def win?
     grid.flatten.all? do |tile|
-      tile.mine && tile.flagged || !title.mine && tile.revealed
+      tile.mine && tile.flagged || !tile.mine && tile.revealed
     end
   end
 
   def render
-    @board.each do |row|
-      line = ""
+    puts "   #{(0...dim).to_a.join(" ")}"
+    @grid.each_with_index do |row, idx|
+      line = "#{idx} "
       row.each do |tile|
         if tile.flagged
           line.concat(" F")
