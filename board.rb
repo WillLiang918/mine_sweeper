@@ -36,7 +36,7 @@ class Board
   end
 
   def game_over?
-    win? || dead
+    win? || @dead
   end
 
   def win?

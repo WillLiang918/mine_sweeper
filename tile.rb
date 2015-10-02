@@ -19,9 +19,9 @@ class Tile
     @tile_pos = tile_pos
   end
 
-
   def reveal
     @revealed = true
+    
   end
 
   def neighbors
@@ -45,6 +45,10 @@ class Tile
 
   def inspect
     "{tile_pos: @tile_pos, mine: @mine, flagged: @flagged, revealed: @revealed}"
+  end
+
+  def toggle_flag
+    @flagged = !@flagged
   end
 
 end
