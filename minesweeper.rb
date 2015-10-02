@@ -1,6 +1,6 @@
 require_relative "board"
 
-class Game
+class MineSweeper
 
   def initialize(board = nil)
     @board = (board ||= Board.new)
@@ -15,13 +15,18 @@ class Game
     STDIN.gets.chomp.split(',').map { |el| el.to_i }
   end
 
-  def valid_pos?(input)
-    # 1, 3
-
+  def get_action
+    puts 'Choose: reveal (r), flag (f), save (s)'
+    STDIN.gets.chomp
   end
 
-  def valid_
+  def valid_pos?(pos)
+    !@board[pos].nil?
+  end
 
+  def valid_action?(action)
+    action == "r" || action == "f"
+  end
 
 
 
